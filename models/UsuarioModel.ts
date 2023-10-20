@@ -5,8 +5,9 @@ const UsuarioSchema = new Schema({
     senha: {type : String, required : true},
     avatar: {type : String, required : false},
     level: {type : Number, default: 1},
-    problemasResolvidos: {type:Number, default: 0},
-    xp: {type: Number, default: 0}
+    NumeroDeproblemasResolvidos: {type : Number, default: 0},
+    xp: {type: Number, default: 0},
+    problemasResolvidos: {type: Array, default: [], required: true}
 
 
 })

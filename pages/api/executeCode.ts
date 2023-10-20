@@ -20,6 +20,10 @@ const executeCode = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).json("Usuario Nao Encontrado")
     }
 
+      if(usuario.problemasResolvidos.includes(req.body.problema)) {
+        return res.status(200).json("Você Já Resolveu este problema antes !!")
+      }
+
     const resposta = await uploadCodigoJudge0(req)
 
     if (!resposta) {
@@ -36,7 +40,8 @@ const executeCode = async (req: NextApiRequest, res: NextApiResponse) => {
         if (respostaDecodificada.trim() === req.body.respostaEsperada) {
 
           usuario.xp += 200;
-          usuario.problemasResolvidos += 1;
+          usuario.NumeroDeproblemasResolvidos += 1;
+          usuario.problemasResolvidos.push(req.body.problema)
 
           if (usuario.xp >= 500) {
             usuario.xp -= 500;
@@ -54,7 +59,7 @@ const executeCode = async (req: NextApiRequest, res: NextApiResponse) => {
     else {
       return res.status(200).json("Resposta Incorreta, erro : " + resposta.status.description)
     }
-
+    
   }
 
   return res.status(400).json("Método Informado Inválido")
