@@ -30,6 +30,9 @@ const executeCode = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(500).json("Erro ao Executar o código Internamente")
     }
 
+   
+
+
     if (resposta.status.description === "Accepted") {
 
       if (resposta.stdout != null) {

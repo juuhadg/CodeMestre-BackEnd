@@ -49,14 +49,10 @@ const streamUpload = (options, fileBuffer) => {
     });
   };
 
-
-
-
-
     
     var options = {
         folder: 'CodeMestre/Avatares',
-        public_id: req?.file.originalname,
+        public_id: req?.file.name,
     }
  
     var resultado = await streamUpload(options,req.file.buffer)

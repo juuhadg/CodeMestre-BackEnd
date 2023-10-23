@@ -39,9 +39,6 @@ const handler = nc()
            
         const image = await uploadImagemCloudinary(req)
 
-
-
-        //salvar no banco de dados
         const usuarioASerSalvo = {
             nome: usuario.nome,
             email: usuario.email,
