@@ -4,6 +4,11 @@ import { conectarBancoDeDados } from "../../middlewares/conectarBancoDeDados";
 import { politicaCORS } from "../../middlewares/CORS";
 
 const problemaEnpoint = async (req:NextApiRequest, res: NextApiResponse) => {
+    const { SEGREDO_DIARIA } = process.env
+    if(req.headers.segredo != SEGREDO_DIARIA ) {
+        return res.status(401).json('Nao Autorizado, Segredo Incorreto')
+    }
+
         if(req.method === 'POST') {
             const problema = {
                 nome: req.body.nome,
