@@ -3,6 +3,7 @@ import uploadCodigoJudge0 from '../../services/uploadCodigoJudge0'
 import { conectarBancoDeDados } from '../../middlewares/conectarBancoDeDados';
 import { UsuarioModel } from '../../models/UsuarioModel';
 import { validarToken } from '../../middlewares/validarToken';
+import { politicaCORS } from '../../middlewares/CORS';
 
 
 
@@ -46,6 +47,17 @@ const executeCode = async (req: NextApiRequest, res: NextApiResponse) => {
           usuario.NumeroDeproblemasResolvidos += 1;
           usuario.problemasResolvidos.push(req.body.problema)
 
+          switch (req.body.linguagemUsada) {
+            case 'javascript':
+              usuario.problemasResolvidosPorLinguagem.javascript++
+              break;
+              case 'python':
+                usuario.problemasResolvidosPorLinguagem.python++
+                break;
+                case 'csharp':
+                  usuario.problemasResolvidosPorLinguagem.csharp++
+          }
+
           if (usuario.xp >= 500) {
             usuario.xp -= 500;
             usuario.level += 1;
@@ -69,6 +81,6 @@ const executeCode = async (req: NextApiRequest, res: NextApiResponse) => {
 
 }
 
-export default validarToken(conectarBancoDeDados(executeCode));
+export default politicaCORS(validarToken(conectarBancoDeDados(executeCode))) ;
 
 

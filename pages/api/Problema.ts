@@ -1,6 +1,7 @@
 import { NextApiRequest,NextApiResponse } from "next";
 import { ProblemaModel } from "../../models/ProblemaModel";
 import { conectarBancoDeDados } from "../../middlewares/conectarBancoDeDados";
+import { politicaCORS } from "../../middlewares/CORS";
 
 const problemaEnpoint = async (req:NextApiRequest, res: NextApiResponse) => {
         if(req.method === 'POST') {
@@ -36,4 +37,4 @@ const problemaEnpoint = async (req:NextApiRequest, res: NextApiResponse) => {
 
 }           
 
-export default conectarBancoDeDados(problemaEnpoint)
+export default politicaCORS(conectarBancoDeDados(problemaEnpoint))

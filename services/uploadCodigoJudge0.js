@@ -10,8 +10,21 @@ const uploadCodigoJudge0 = async (req) => {
         X_RAPIDAPI_HOST
       }  = process.env
 
-      
-      
+      var linguagemId;
+
+        switch(req.body.linguagemUsada) {
+          case 'javascript':
+          linguagemId = 93
+          break;
+          case 'python':
+          linguagemId = 92
+          break;
+          case 'csharp':
+          linguagemId = 51
+          break;
+
+        }
+
 
     const options = {
         method: 'POST',
@@ -22,7 +35,7 @@ const uploadCodigoJudge0 = async (req) => {
           'X-RapidAPI-Key': X_RAPIDAPI_KEY ,
           'X-RapidAPI-Host': X_RAPIDAPI_HOST
         },data: {
-            language_id: req.body.language_id,
+            language_id: linguagemId,
             source_code: req.body.codigo,
             
             

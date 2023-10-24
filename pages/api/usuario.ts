@@ -6,6 +6,8 @@ import {v2 as cloudinary} from 'cloudinary';
 import formatarUrl from '../../services/formatarUrl'
 import { upload, uploadImagemCloudinary } from '../../services/uploadImagemCloudinary';
 import nc from 'next-connect'
+import { politicaCORS } from "../../middlewares/CORS";
+
 
     const {
     CLOUDINARY_NAME,
@@ -57,7 +59,7 @@ const handler = nc()
         
           
                     
-                
+            
         
 
         await UsuarioModel.findByIdAndUpdate({ _id: usuario._id }, usuario);
@@ -97,4 +99,4 @@ export const config = {
     }
 }
 
-export default validarToken(conectarBancoDeDados(handler))
+export default politicaCORS(validarToken(conectarBancoDeDados(handler)))

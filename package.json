@@ -18,6 +18,7 @@
     "multer": "^1.4.5-lts.1",
     "next": "13.5.5",
     "next-connect": "^0.13.0",
+    "nextjs-cors": "^2.1.2",
     "node-cron": "^3.0.2",
     "streamifier": "^0.1.1",
     "types": "^0.1.1",

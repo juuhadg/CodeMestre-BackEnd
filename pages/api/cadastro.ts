@@ -5,6 +5,7 @@ import md5 from 'md5';
 import nc from 'next-connect';
 import { upload, uploadImagemCloudinary } from '../../services/uploadImagemCloudinary';
 import { UsuarioModel } from '../../models/UsuarioModel';
+import { politicaCORS } from '../../middlewares/CORS';
 
 
 const handler = nc()
@@ -57,4 +58,4 @@ export const config = {
 }
 
 
-export default (conectarBancoDeDados(handler));
+export default politicaCORS(conectarBancoDeDados(handler));

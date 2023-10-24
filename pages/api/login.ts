@@ -3,6 +3,7 @@ import md5 from 'md5';
 import { UsuarioModel } from '../../models/UsuarioModel';
 import jwt from 'jsonwebtoken';
 import { conectarBancoDeDados } from '../../middlewares/conectarBancoDeDados';
+import { politicaCORS } from '../../middlewares/CORS';
 
 const endpointLogin = async (
     req: NextApiRequest,
@@ -43,4 +44,4 @@ const endpointLogin = async (
     return res.status(405).json({ erro: 'Metodo Informado nao e valido' })
 }
 
-export default conectarBancoDeDados(endpointLogin);
+export default politicaCORS(conectarBancoDeDados(endpointLogin));
