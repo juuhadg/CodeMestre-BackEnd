@@ -12,6 +12,7 @@
     "@types/node": "^18.15.11",
     "axios": "^1.5.1",
     "cloudinary": "^1.41.0",
+    "google-auth-library": "^9.1.0",
     "jsonwebtoken": "^9.0.2",
     "md5": "^2.3.0",
     "mongoose": "^7.6.3",
