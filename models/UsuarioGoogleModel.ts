@@ -4,7 +4,7 @@ const UsuarioGoogleSchema = new Schema({
     nome:{type: String, required : true},
     email: {type : String, required : true},
     avatar: {type : String, required : false},
-    usuarioDoGoogle: {type: Boolean, default:true},
+    usuarioDoGoogle: {type: Boolean, required: false},
     xp: {type: Number, default: 0},
     level: {type : Number, default: 1},
     NumeroDeproblemasResolvidos: {type : Number, default: 0},

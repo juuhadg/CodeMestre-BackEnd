@@ -3,17 +3,24 @@ import { conectarBancoDeDados } from '../../middlewares/conectarBancoDeDados';
 import { politicaCORS } from '../../middlewares/CORS';
 import { validarGoogleToken } from '../../middlewares/validarGoogleToken';
 import { UsuarioGoogleModel } from '../../models/UsuarioGoogleModel';
-const axios = require('axios');
+import jwt from 'jsonwebtoken';
 
 
 
 
-const endpointGoogle = async (
+
+const endpointLoginGoogle = async (
     req: NextApiRequest,
     res: NextApiResponse
 ) => {
 
-  
+        
+    const { JWT_KEY } = process.env;
+    if (!JWT_KEY) {
+        return res.status(500).json({ erro: 'ENV JWT Nao informada' })
+    }
+
+
 
     if (req.method === 'POST') {
         const googleTokenResponse = req.body.googleTokenResponse
@@ -23,27 +30,35 @@ const endpointGoogle = async (
   
             const userInfo = googleTokenResponse.user
 
-                const usuarioJaExiste = await UsuarioGoogleModel.find({googleId : userInfo.sub})
-                if(usuarioJaExiste &&  usuarioJaExiste.length > 0) {
-                        return res.status(400).json("Esse Usuário Já Existe!, faça login")
-
-                    }
+               
+               
 
 
-       const usuarioASerCriado = {
+       const usuarioALogar = {
             googleId: userInfo.sub,
-            nome: userInfo.name,
             email: userInfo.email,
-            avatar: userInfo.picture,
             usuarioDoGoogle: true,
        }
 
+       const usuarioExiste = await UsuarioGoogleModel.find(usuarioALogar)
+       if(!usuarioExiste || usuarioExiste.length < 1) {
+        return res.status(400).json('Usuario Nao Encontrado, faça seu Cadastro!')
+       }
 
-           await UsuarioGoogleModel.create(usuarioASerCriado)
-           return res.status(200).json("Usuario Cadastrado com o Google com Sucesso!")
+       const usuarioEncontrado = usuarioExiste[0]
+       const token = jwt.sign({ _id: usuarioEncontrado._id }, JWT_KEY);
+
+
+       return res.status(200).json({
+        nome: usuarioEncontrado.nome,
+        email: usuarioEncontrado.email,
+        token
+    });
+
+        
 
     }
     return res.status(405).json({ erro: 'Metodo Informado nao e valido' })
 }
 
-export default politicaCORS(validarGoogleToken(conectarBancoDeDados(endpointGoogle)));
+export default politicaCORS(validarGoogleToken(conectarBancoDeDados(endpointLoginGoogle)));

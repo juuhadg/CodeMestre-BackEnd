@@ -35,8 +35,8 @@ const endpointLogin = async (
                 nome: usuarioEncontrado.nome,
                 email: usuarioEncontrado.email,
                 token
-            })
-                ;
+            });
+                
         }
 
         return res.status(400).json({ erro: 'Usuario ou Senha Incorreto' })

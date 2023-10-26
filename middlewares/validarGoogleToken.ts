@@ -23,7 +23,7 @@ if(req.method !=='OPTIONS'){
 
 } catch(e) {
     console.log(e);
-    return res.status(401).json({ valid: false, error: 'Token inválido' })
+    return res.status(401).json({ valid: false, error: 'Token  Google inválido' })
 }
 
 
