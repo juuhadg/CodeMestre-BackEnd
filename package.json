@@ -21,6 +21,7 @@
     "next-connect": "^0.13.0",
     "nextjs-cors": "^2.1.2",
     "node-cron": "^3.0.2",
+    "nodemailer": "^6.9.7",
     "streamifier": "^0.1.1",
     "types": "^0.1.1",
     "typescript": "5.2.2"
