@@ -19,6 +19,13 @@ const endpointEsqueciASenha = async (req:NextApiRequest, res:NextApiResponse) =>
                     }
 
                         const usuario = emailExistente[0];
+                        console.log(usuario)
+
+                        if(usuario.usuarioDoGoogle === true) {
+                                return res.status(200).json("Parece que este email está cadastrado com o Google, faça login com a sua conta em vez das credenciais.")
+                            }
+
+
                         const jwtsecret = JWT_SECRET + usuario.senha
                         const payload = {
                             email: usuario.email,

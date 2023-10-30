@@ -23,11 +23,14 @@ const endpointGoogle = async (
   
             const userInfo = googleTokenResponse.user
 
-                const usuarioJaExiste = await UsuarioGoogleModel.find({googleId : userInfo.sub})
-                if(usuarioJaExiste &&  usuarioJaExiste.length > 0) {
+            const usuarioJaExiste = await UsuarioGoogleModel.find({ $or: [ { googleId: userInfo.sub }, { email: userInfo.email } ] });
+                console.log(usuarioJaExiste)
+                if((usuarioJaExiste &&  usuarioJaExiste.length > 0)) {
                         return res.status(400).json("Esse Usuário Já Existe!, faça login")
 
                     }
+
+                    
 
 
        const usuarioASerCriado = {
