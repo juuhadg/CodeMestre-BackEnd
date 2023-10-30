@@ -13,7 +13,7 @@ const endpointEsqueciASenha = async (req:NextApiRequest, res:NextApiResponse) =>
 
                     const  email = req.body.email
                     const emailExistente = await UsuarioModel.find({email:email})
-                    console.log(emailExistente)
+                    
                     if(!emailExistente || emailExistente.length < 1 ) {
                         return res.status(400).json("Email Nao Existente")
                     }
@@ -36,6 +36,7 @@ const endpointEsqueciASenha = async (req:NextApiRequest, res:NextApiResponse) =>
                         }
 
                         enviarEmail(emailPayload)
+                       
                         return res.status(200).json("Email com o Link para a Redefinição Enviado com Sucesso!")
                 
 
