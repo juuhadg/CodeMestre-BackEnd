@@ -9,7 +9,7 @@ const UsuarioGoogleSchema = new Schema({
     level: {type : Number, default: 1},
     NumeroDeproblemasResolvidos: {type : Number, default: 0},
     problemasResolvidosPorLinguagem: {type:Object,default: {javascript : 0,python: 0,csharp:0}},
-    problemasResolvidos: {type: Array, default: [], required: true},
+    problemasResolvidos: {type: Array, default: []},
     missaoDiaria: {type:Object,required:false}
 
 
