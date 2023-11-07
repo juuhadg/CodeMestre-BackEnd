@@ -1,17 +1,18 @@
 
-export default function enviarEmail(dados) {
+import nodemailer from 'nodemailer'
+export default async function enviarEmail(dados) {
  
     const { LOGIN_EMAIL , SENHA_EMAIL } = process.env
 
 
-    const nodemailer = require('nodemailer')
 
 let mailTransporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: LOGIN_EMAIL,
         pass: SENHA_EMAIL
-    }
+    },
+    
 })
 
 const mailOptions = {
@@ -21,7 +22,7 @@ const mailOptions = {
     text: dados.text
 }
 
-mailTransporter.sendMail(mailOptions,function(error,info) {
+ await mailTransporter.sendMail(mailOptions,function(error,info) {
     if(error) {
         return error;
     } else {
