@@ -9,23 +9,23 @@ import { politicaCORS } from '../../middlewares/CORS';
 
 
 
-const executeCode = async (req: NextApiRequest, res: NextApiResponse) => {
+const enviarMissaoDiaria = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (req.method === 'POST') {
 
 
     const { userId } = req.query
-    const usuario = await UsuarioModel.findById(userId);
+    const usuario  = await UsuarioModel.findById(userId);
 
     if (!usuario) {
       return res.status(400).json("Usuario Nao Encontrado")
     }
 
-      if(usuario.problemasResolvidos.includes(req.body.problema)) {
-        return res.status(200).json("Você Já Resolveu este problema antes !!")
-      }
+    if(!usuario.missaoDiaria) {
+        return res.status(400).json("Você Já Concluiu a Missao Diaria de Hoje, Volte Amanhã!")
+    }
 
-    const resposta = await uploadCodigoJudge0(req)
+    const resposta = await uploadCodigoJudge0(req);
 
     if (!resposta) {
       return res.status(500).json("Erro ao Executar o código Internamente")
@@ -41,9 +41,9 @@ const executeCode = async (req: NextApiRequest, res: NextApiResponse) => {
         const respostaBuffer = Buffer.from(resposta.stdout, 'base64');
         const respostaDecodificada = respostaBuffer.toString('utf-8');
 
-        if (respostaDecodificada.trim() === req.body.respostaEsperada) {
+        if (respostaDecodificada.trim() === usuario.missaoDiaria.respostaEsperada) {
 
-          usuario.xp += 200;
+          usuario.xp += 350;
 
           if (usuario.xp >= 500) { // upar de nivel e resetar xp para 0
             usuario.xp -= 500;
@@ -51,7 +51,13 @@ const executeCode = async (req: NextApiRequest, res: NextApiResponse) => {
           }
 
           usuario.NumeroDeproblemasResolvidos += 1;
-          usuario.problemasResolvidos.push(req.body.problema)
+          usuario.streak +=1;
+
+          const dataAtual = new Date();
+
+          usuario.ultimaMissaoDiariaConcluida = dataAtual;
+          usuario.missaoDiaria = null;
+       
 
           switch (req.body.linguagemUsada) {
             case 'javascript':
@@ -67,6 +73,7 @@ const executeCode = async (req: NextApiRequest, res: NextApiResponse) => {
         
 
           await UsuarioModel.findByIdAndUpdate({ _id: usuario._id }, usuario);
+          
           return res.status(200).json("Resposta Correta, Problema Concluído com sucesso!")
         }
         else {
@@ -84,6 +91,6 @@ const executeCode = async (req: NextApiRequest, res: NextApiResponse) => {
 
 }
 
-export default politicaCORS(validarToken(conectarBancoDeDados(executeCode))) ;
+export default politicaCORS(validarToken(conectarBancoDeDados(enviarMissaoDiaria))) ;
 
 

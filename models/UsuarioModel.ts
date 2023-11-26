@@ -9,7 +9,9 @@ const UsuarioSchema = new Schema({
     NumeroDeproblemasResolvidos: {type : Number, default: 0},
     problemasResolvidosPorLinguagem: {type:Object,default: {javascript : 0,python: 0,csharp:0}},
     problemasResolvidos: {type: Array, default: []},
-    missaoDiaria: {type:Object,required:false}
+    missaoDiaria: {type:Object,required:false},
+    streak: {type: Number, default : 0},
+    ultimaMissaoDiariaConcluida: {type: Date , required : false}
 
 
 })
