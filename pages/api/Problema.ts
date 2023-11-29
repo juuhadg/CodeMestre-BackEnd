@@ -13,6 +13,7 @@ const problemaEnpoint = async (req:NextApiRequest, res: NextApiResponse) => {
             const problema = {
                 nome: req.body.nome,
                 descricao: req.body.descricao,
+                exemplos : req.body.exemplos,
                 respostaEsperada: req.body.respostaEsperada
             }
             
@@ -32,6 +33,7 @@ const problemaEnpoint = async (req:NextApiRequest, res: NextApiResponse) => {
             const novoProblema = {
                 nome: req.body.nome,
                 descricao: req.body.descricao,
+                exemplos: req.body.exemplo,
                 respostaEsperada: req.body.respostaEsperada
             }
             await ProblemaModel.findOneAndUpdate({nome :req.body.nomeAntigo},novoProblema)
