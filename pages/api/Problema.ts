@@ -36,8 +36,15 @@ const problemaEnpoint = async (req:NextApiRequest, res: NextApiResponse) => {
                 exemplos: req.body.exemplo,
                 respostaEsperada: req.body.respostaEsperada
             }
-            await ProblemaModel.findOneAndUpdate({nome :req.body.nomeAntigo},novoProblema)
-            return res.status(200).json("problema Atualizado com sucesso")
+            try {
+                await ProblemaModel.findOneAndUpdate({nome :req.body.nomeAntigo},novoProblema)
+                return res.status(200).json("problema Atualizado com sucesso")
+
+            } catch(e) {
+                return res.status(500).json('Erro ao Atualizar o problema')
+            }
+
+
         }           
 
 
