@@ -49,7 +49,8 @@ const uploadCodigoJudge0 = async (req) => {
         console.log(response.data)
         return response.data;
       } catch (error) {
-       // console.error(error);
+        console.log(error)
+       return null
       }
 
       

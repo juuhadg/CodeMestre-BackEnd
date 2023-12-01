@@ -4,6 +4,8 @@ import { conectarBancoDeDados } from '../../middlewares/conectarBancoDeDados';
 import { UsuarioModel } from '../../models/UsuarioModel';
 import { validarToken } from '../../middlewares/validarToken';
 import { politicaCORS } from '../../middlewares/CORS';
+import { reduceEachTrailingCommentRange } from 'typescript';
+import adicionarTestCases from '../../services/adicionarTestCases'
 
 
 
@@ -25,24 +27,39 @@ const enviarMissaoDiaria = async (req: NextApiRequest, res: NextApiResponse) => 
         return res.status(400).json("Você Já Concluiu a Missao Diaria de Hoje, Volte Amanhã!")
     }
 
+    
+
+      const dados = {
+        codigo: req.body.codigo,
+        linguagem: req.body.linguagemUsada,
+        testCases: usuario.missaoDiaria.testCases,
+        nomeDaFuncao: usuario.missaoDiaria.nomeDaFuncao
+      }
+        const codigoComTestCases = adicionarTestCases(dados)
+      console.log(codigoComTestCases);
+       
+      req.body.codigo = codigoComTestCases
+    
+    
+
     const resposta = await uploadCodigoJudge0(req);
 
     if (!resposta) {
-      return res.status(500).json("Erro ao Executar o código Internamente")
+      return res.status(500).json("Erro ao Executar o código Internamente, código incorreto!")
     }
 
-   
+  
 
 
-    if (resposta.status.description === "Accepted") {
+    if (resposta.status.description === "Accepted") { 
 
       if (resposta.stdout != null) {
 
         const respostaBuffer = Buffer.from(resposta.stdout, 'base64');
-        const respostaDecodificada = respostaBuffer.toString('utf-8');
-
-        if (respostaDecodificada.trim() === usuario.missaoDiaria.respostaEsperada) {
-
+        const respostaDecodificada = respostaBuffer.toString('utf-8').trim().replace(/\n/g, ',');
+        
+        if (respostaDecodificada === usuario.missaoDiaria.respostaEsperada.toString()) {
+            
           usuario.xp += 350;
 
           if (usuario.xp >= 500) { // upar de nivel e resetar xp para 0
@@ -67,7 +84,10 @@ const enviarMissaoDiaria = async (req: NextApiRequest, res: NextApiResponse) => 
                 usuario.problemasResolvidosPorLinguagem.python++
                 break;
                 case 'csharp':
-                  usuario.problemasResolvidosPorLinguagem.csharp++
+                  usuario.problemasResolvidosPorLinguagem.csharp++;
+                  break;
+                default:
+                  break;
           }
 
         
@@ -77,7 +97,7 @@ const enviarMissaoDiaria = async (req: NextApiRequest, res: NextApiResponse) => 
           return res.status(200).json("Resposta Correta, Problema Concluído com sucesso!")
         }
         else {
-          return res.status(200).json(`Código sem Erros, mas Resposta errada, resposta esperada : ${req.body.respostaEsperada} , resposta recebida : ${respostaDecodificada.trim()}`)
+          return res.status(200).json(`Código sem Erros, mas Resposta errada, resposta esperada : ${usuario.missaoDiaria.respostaEsperada.toString()} , resposta recebida : ${respostaDecodificada}`)
         }
       }
     }
@@ -92,5 +112,7 @@ const enviarMissaoDiaria = async (req: NextApiRequest, res: NextApiResponse) => 
 }
 
 export default politicaCORS(validarToken(conectarBancoDeDados(enviarMissaoDiaria))) ;
+
+
 
 
