@@ -15,7 +15,8 @@ const problemaEnpoint = async (req:NextApiRequest, res: NextApiResponse) => {
                 descricao: req.body.descricao,
                 exemplos : req.body.exemplos,
                 respostaEsperada: req.body.respostaEsperada,
-                testCases: [req.body.testCases]
+                testCases: req.body.testCases,
+                nomeDaFuncao: req.body.nomeDaFuncao
             }
             
             const problemaJaExiste = await ProblemaModel.find({nome:problema.nome})
@@ -34,9 +35,10 @@ const problemaEnpoint = async (req:NextApiRequest, res: NextApiResponse) => {
             const novoProblema = {
                 nome: req.body.nome,
                 descricao: req.body.descricao,
-                exemplos: req.body.exemplo,
+                exemplos: req.body.exemplos,
                 respostaEsperada: req.body.respostaEsperada,
-                testCases: req.body.testCases
+                testCases: req.body.testCases,
+                nomeDaFuncao: req.body.nomeDaFuncao
             }
             try {
                 await ProblemaModel.findOneAndUpdate({nome :req.body.nomeAntigo},novoProblema)
@@ -47,7 +49,35 @@ const problemaEnpoint = async (req:NextApiRequest, res: NextApiResponse) => {
             }
 
 
-        }           
+        } 
+        
+        if(req.method === 'GET') {
+            var problemas ;
+            if(!req.query.id) {
+                try {
+                    problemas = await ProblemaModel.find();
+                    if(!problemas || problemas.length < 1) {
+                        return res.status(400).json("Problemas Não foram Encontrados")
+                    }
+                        return res.status(200).json(problemas)
+                } catch(e) {
+                        return res.status(500).json("Erro Interno " + e)
+                    }
+                   
+            }
+                    const {id} = req.query
+            try {
+                problemas = await ProblemaModel.findById(id);
+                if(!problemas || problemas.length < 1) {
+                    return res.status(400).json("Problema Nao Existe")
+                }
+                return res.status(200).json(problemas)
+
+            } catch(e) {
+                return res.status(500).json("Erro ao encontrar problema " + e)
+            }
+
+        }
 
 
 
