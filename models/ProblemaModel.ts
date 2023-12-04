@@ -5,6 +5,7 @@ const ProblemaSchema = new Schema({
     respostaEsperada : {type: Array , required:true},
     exemplos: {type : Array, default: []},
     testCases: {type:Array, default:[]},
+    isArray: {type: Boolean, default: false},
     nomeDaFuncao: {type: String , required : true}
     
 })

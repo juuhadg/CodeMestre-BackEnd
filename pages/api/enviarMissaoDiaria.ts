@@ -4,9 +4,9 @@ import { conectarBancoDeDados } from '../../middlewares/conectarBancoDeDados';
 import { UsuarioModel } from '../../models/UsuarioModel';
 import { validarToken } from '../../middlewares/validarToken';
 import { politicaCORS } from '../../middlewares/CORS';
-import { reduceEachTrailingCommentRange } from 'typescript';
-import adicionarTestCases from '../../services/adicionarTestCases'
-
+import adicionarTestCases from '../../services/adicionarTestCases';
+import  {convertFromBase64} from '../../services/convertFromBase64';
+import {formatarNumero} from '../../services/removerZerosInuteis';
 
 
 
@@ -27,13 +27,14 @@ const enviarMissaoDiaria = async (req: NextApiRequest, res: NextApiResponse) => 
         return res.status(400).json("Você Já Concluiu a Missao Diaria de Hoje, Volte Amanhã!")
     }
 
-    
+      
 
       const dados = {
         codigo: req.body.codigo,
         linguagem: req.body.linguagemUsada,
         testCases: usuario.missaoDiaria.testCases,
-        nomeDaFuncao: usuario.missaoDiaria.nomeDaFuncao
+        nomeDaFuncao: usuario.missaoDiaria.nomeDaFuncao,
+        isArray: usuario.missaoDiaria.isArray
       }
         const codigoComTestCases = adicionarTestCases(dados)
       console.log(codigoComTestCases);
@@ -57,8 +58,8 @@ const enviarMissaoDiaria = async (req: NextApiRequest, res: NextApiResponse) => 
 
         const respostaBuffer = Buffer.from(resposta.stdout, 'base64');
         const respostaDecodificada = respostaBuffer.toString('utf-8').trim().replace(/\n/g, ',');
-        
-        if (respostaDecodificada === usuario.missaoDiaria.respostaEsperada.toString()) {
+          const respostaFormatada = formatarNumero(respostaDecodificada)
+        if (respostaFormatada === usuario.missaoDiaria.respostaEsperada.toString()) {
             
           usuario.xp += 350;
 
@@ -97,12 +98,17 @@ const enviarMissaoDiaria = async (req: NextApiRequest, res: NextApiResponse) => 
           return res.status(200).json("Resposta Correta, Problema Concluído com sucesso!")
         }
         else {
-          return res.status(200).json(`Código sem Erros, mas Resposta errada, resposta esperada : ${usuario.missaoDiaria.respostaEsperada.toString()} , resposta recebida : ${respostaDecodificada}`)
+          return res.status(200).json(`Código sem Erros, mas Resposta errada, resposta esperada : ${usuario.missaoDiaria.respostaEsperada.toString()} , resposta recebida : ${respostaFormatada}`)
         }
       }
     }
     else {
-      return res.status(200).json("Resposta Incorreta, erro : " + resposta.status.description)
+        var codigoDeErro = ''
+        if(resposta.compile_output != null) {
+             codigoDeErro = convertFromBase64(resposta.compile_output).replace(/\n/g, "")
+        }
+
+      return res.status(200).json("Resposta Incorreta, erro : " + resposta.status.description +" : "  + codigoDeErro )
     }
     
   }

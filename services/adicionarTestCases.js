@@ -18,22 +18,28 @@ export default function adicionarTestCases(dados) {
     const codigoConvertidoString = codigo2Buffer.toString('utf-8');
 
         if(dados.linguagem === 'csharp') {
-            dados.nomeDaFuncao = dados.nomeDaFuncao.charAt(0).toUpperCase() + dados.nomeDaFuncao.slice(1);
-
+            let nomeFuncao = dados.nomeDaFuncao.charAt(0).toUpperCase() + dados.nomeDaFuncao.slice(1);
+                console.log(nomeFuncao)
                 var codigo =  `using System;
 
                 namespace Problema
                 {
                     class ProblemaMain
                     {
+                        
                         ${codigoConvertidoString}
                 
                         static void Main()
                         {
-                            Console.WriteLine(${dados.nomeDaFuncao}(${dados.testCases[0]}));
-                            Console.WriteLine(${dados.nomeDaFuncao}(${dados.testCases[1]}));
-                            Console.WriteLine(${dados.nomeDaFuncao}(${dados.testCases[2]}));
-
+                            ${dados.isArray == false ? `
+                            Console.WriteLine(${nomeFuncao}(${dados.testCases[0]}));
+                            Console.WriteLine(${nomeFuncao}(${dados.testCases[1]}));
+                            Console.WriteLine(${nomeFuncao}(${dados.testCases[2]}));
+                            ` : `
+                            Console.WriteLine(${nomeFuncao}(new int[] { ${dados.testCases[0] }));
+                            Console.WriteLine(${nomeFuncao}(new int[] { ${dados.testCases[1] }));
+                            Console.WriteLine(${nomeFuncao}(new int[] { ${dados.testCases[2] }));
+                            `}
                         }
                     }
                 }
@@ -48,7 +54,17 @@ export default function adicionarTestCases(dados) {
                 codigo = 
                
                    `
-       ${comando}(${dados.nomeDaFuncao + `(${dados.testCases[0]})`}); ${comando}(${dados.nomeDaFuncao + `(${dados.testCases[1]})`});  ${comando}(${dados.nomeDaFuncao + `(${dados.testCases[2]})`});
+                   
+                   ${dados.isArray == false ? `
+${comando}(${dados.nomeDaFuncao + `(${dados.testCases[0]})`});
+${comando}(${dados.nomeDaFuncao + `(${dados.testCases[1]})`}); 
+${comando}(${dados.nomeDaFuncao + `(${dados.testCases[2]})`});
+                   ` : `
+${comando}(${dados.nomeDaFuncao + `([${dados.testCases[0]}])`});
+${comando}(${dados.nomeDaFuncao + `([${dados.testCases[1]}])`}); 
+${comando}(${dados.nomeDaFuncao + `([${dados.testCases[2]}])`});
+                   `
+                }
                    `
                    codigo = codigoConvertidoString + codigo
             }
@@ -66,3 +82,6 @@ export default function adicionarTestCases(dados) {
 
 
 }
+
+
+    
