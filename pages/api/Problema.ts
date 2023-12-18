@@ -38,7 +38,8 @@ const problemaEnpoint = async (req:NextApiRequest, res: NextApiResponse) => {
                 exemplos: req.body.exemplos,
                 respostaEsperada: req.body.respostaEsperada,
                 testCases: req.body.testCases,
-                nomeDaFuncao: req.body.nomeDaFuncao
+                nomeDaFuncao: req.body.nomeDaFuncao,
+                isArray: req.body.isArray
             }
             try {
                 await ProblemaModel.findOneAndUpdate({nome :req.body.nomeAntigo},novoProblema)
@@ -84,3 +85,5 @@ const problemaEnpoint = async (req:NextApiRequest, res: NextApiResponse) => {
 }           
 
 export default politicaCORS(conectarBancoDeDados(problemaEnpoint))
+
+
