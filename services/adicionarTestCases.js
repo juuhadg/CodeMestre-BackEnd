@@ -36,9 +36,9 @@ export default function adicionarTestCases(dados) {
                             Console.WriteLine(${nomeFuncao}(${dados.testCases[1]}));
                             Console.WriteLine(${nomeFuncao}(${dados.testCases[2]}));
                             ` : `
-                            Console.WriteLine(${nomeFuncao}(new int[] { ${dados.testCases[0] }));
-                            Console.WriteLine(${nomeFuncao}(new int[] { ${dados.testCases[1] }));
-                            Console.WriteLine(${nomeFuncao}(new int[] { ${dados.testCases[2] }));
+                            Console.WriteLine(${nomeFuncao}(new int[] { ${dados.testCases[0]} }));
+                            Console.WriteLine(${nomeFuncao}(new int[] { ${dados.testCases[1]} }));
+                            Console.WriteLine(${nomeFuncao}(new int[] { ${dados.testCases[2]} }));
                             `}
                         }
                     }
