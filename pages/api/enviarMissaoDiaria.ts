@@ -46,7 +46,7 @@ const enviarMissaoDiaria = async (req: NextApiRequest, res: NextApiResponse) => 
     const resposta = await uploadCodigoJudge0(req);
 
     if (!resposta) {
-      return res.status(500).json("Erro ao Executar o código Internamente, código incorreto!")
+      return res.status(500).json({status : 'erro' , resposta : "Erro ao Executar o código Internamente, código incorreto!"})
     }
 
   
@@ -95,10 +95,10 @@ const enviarMissaoDiaria = async (req: NextApiRequest, res: NextApiResponse) => 
 
           await UsuarioModel.findByIdAndUpdate({ _id: usuario._id }, usuario);
           
-          return res.status(200).json("Resposta Correta, Problema Concluído com sucesso!")
+          return res.status(200).json({status : 'sucesso', resposta: "Resposta Correta, Problema Concluído com sucesso!"})
         }
         else {
-          return res.status(200).json(`Código sem Erros, mas Resposta errada, resposta esperada : ${usuario.missaoDiaria.respostaEsperada.toString()} , resposta recebida : ${respostaFormatada}`)
+          return res.status(200).json({status: 'erro', resposta:`Código sem Erros, mas Resposta errada, resposta esperada : ${usuario.missaoDiaria.respostaEsperada.toString()} , resposta recebida : ${respostaFormatada}`})
         }
       }
     }
@@ -108,7 +108,7 @@ const enviarMissaoDiaria = async (req: NextApiRequest, res: NextApiResponse) => 
              codigoDeErro = convertFromBase64(resposta.compile_output).replace(/\n/g, "")
         }
 
-      return res.status(200).json("Resposta Incorreta, erro : " + resposta.status.description +" : "  + codigoDeErro )
+      return res.status(200).json( { status: 'erro', resposta:"Resposta Incorreta, erro : " + resposta.status.description +" : "  + codigoDeErro })
     }
     
   }
