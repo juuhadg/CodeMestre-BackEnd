@@ -1,8 +1,5 @@
 import mongoose, {Schema} from "mongoose";
-import obterMissaoDiriaInicial from "../services/missaoDiariaInicial";
-
-const missaoDiariaInicial = obterMissaoDiriaInicial()
-
+import { missaoDiariaInicial } from '../services/missaoDiariaInicial'
 const UsuarioGoogleSchema = new Schema({
     googleId: {type:String,required:true},
     nome:{type: String, required : true},
@@ -14,7 +11,7 @@ const UsuarioGoogleSchema = new Schema({
     NumeroDeproblemasResolvidos: {type : Number, default: 0},
     problemasResolvidosPorLinguagem: {type:Object,default: {javascript : 0,python: 0,csharp:0}},
     problemasResolvidos: {type: Array, default: []},
-    missaoDiaria: {type: Object, default:missaoDiariaInicial},
+    missaoDiaria: {type:Object,default:missaoDiariaInicial},
     streak:{type: Number , default : 0},
     ultimaMissaoDiariaConcluida: {type: Date , required : false}
 
