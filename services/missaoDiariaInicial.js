@@ -1,4 +1,5 @@
-export const missaoDiariaInicial = {
+export default function obterMissaoDiriaInicial() {
+    const missaoDiariaInicial = {
     nome: 'raiz quadrada de x',
     descricao: 'Crie uma função que recebe um numero X e retorna a raiz quadrada desse numero',
     respostaEsperada: ['2500', '4', '121'],
@@ -6,3 +7,5 @@ export const missaoDiariaInicial = {
     nomeDaFuncao: "raizQuadradaX",
     testCases: [50, 2, 11]
 };
+return missaoDiariaInicial
+}

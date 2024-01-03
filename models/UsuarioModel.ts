@@ -1,5 +1,8 @@
 import mongoose, {Schema} from "mongoose";
-import { missaoDiariaInicial } from '../services/missaoDiariaInicial'
+import obterMissaoDiriaInicial from "../services/missaoDiariaInicial";
+
+const missaoDiariaInicial = obterMissaoDiriaInicial()
+
 const UsuarioSchema = new Schema({
     nome:{type: String, required : true},
     email: {type : String, required : true},
