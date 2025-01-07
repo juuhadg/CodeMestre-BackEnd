@@ -22,13 +22,16 @@ const mailOptions = {
     text: dados.text
 }
 
- await mailTransporter.sendMail(mailOptions,function(error,info) {
-    if(error) {
-        return error;
-    } else {
-        return(info.response)
-    }
-})
+await new Promise((resolve, reject) => {
+    mailTransporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        resolve(info);
+      }
+    });
+  });
 
 
 
